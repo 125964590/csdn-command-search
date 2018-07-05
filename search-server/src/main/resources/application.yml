@@ -1,0 +1,52 @@
+server:
+  port: 18090
+  compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+        min-response-size: 2048
+  #替换Tomcat容器，性能更优
+  undertow:
+      io-threads: 8
+      worker-threads: 248
+      buffer-size: 1024
+spring:
+  profiles:
+    active: ${project.environment}
+  application:
+    name: search-service
+management:
+  info.git.mode: full
+  security:
+    enabled: false
+  context-path: /_monitor
+  add-application-context-header: false
+
+htonline:
+  wrapper.enabled: true
+logging:
+  config: "classpath:config/log4j2-${spring.profiles.active}.xml"
+
+---
+spring:
+  profiles: dev
+
+  application:
+    name: ${server_name}
+
+eureka:
+  client:
+    serviceUrl:
+#      defaultZone: http://localhost:11003/eureka/
+      defaultZone: http://123.103.86.52:11003/eureka/
+
+---
+spring:
+  profiles: test
+
+  application:
+    name: ${server_name}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.100.22:11003/eureka/
